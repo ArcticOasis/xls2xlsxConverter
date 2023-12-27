@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34227.203
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xls2xlsxConverter", "xls2xlsxConverter.csproj", "{D68AB1A2-B01D-4644-AE6C-D968B1DEE1DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D68AB1A2-B01D-4644-AE6C-D968B1DEE1DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D68AB1A2-B01D-4644-AE6C-D968B1DEE1DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D68AB1A2-B01D-4644-AE6C-D968B1DEE1DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D68AB1A2-B01D-4644-AE6C-D968B1DEE1DD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DF899ABA-7498-4B04-82F5-A6AD99AFC952}
+	EndGlobalSection
+EndGlobal
