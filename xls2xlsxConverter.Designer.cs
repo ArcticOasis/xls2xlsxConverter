@@ -66,6 +66,7 @@ namespace xls2xlsxConverter
             btn_convert.Text = "Convert";
             btn_convert.TextAlign = ContentAlignment.BottomCenter;
             btn_convert.UseVisualStyleBackColor = true;
+            btn_convert.Click += btn_convert_Click;
             // 
             // openFileDialog1
             // 
