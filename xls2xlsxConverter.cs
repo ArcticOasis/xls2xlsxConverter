@@ -11,19 +11,6 @@ namespace xls2xlsxConverter
         public xls2xlsxConverter()
         {
             InitializeComponent();
-            Init_dGV();
-        }
-
-        public void Init_dGV()
-        {
-            DataTable dt = new DataTable();
-
-            dt.Columns.Add("No.", typeof(int));
-            dt.Columns.Add("FileName", typeof(string));
-            dt.Columns.Add("InputFilePath", typeof(string));
-            dt.Columns.Add("Progress", typeof(string));
-
-            dGV_FileList.DataSource = dt;
         }
 
         private void btn_folder_Click(object sender, EventArgs e)
@@ -34,7 +21,7 @@ namespace xls2xlsxConverter
 
                 if (result == DialogResult.OK)
                 {
-                    txt_selectedPath.Text = v_FBD.SelectedPath;
+                    txt_selectedPath.Text = v_FBD.SelectedPath + @"\";
                 }
             }
         }
@@ -48,7 +35,7 @@ namespace xls2xlsxConverter
 
                 if (result == DialogResult.OK) 
                 {
-                    MessageBox.Show(OFD.FileName, "Happy", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    dGV_FileList.Rows.Add(dGV_FileList.Rows.Count + 1, OFD.SafeFileName, "STANDBY", OFD.FileName);
                 }
             }
 
@@ -81,7 +68,7 @@ namespace xls2xlsxConverter
 
             if (result == DialogResult.Yes)
             {
-                Init_dGV();
+                dGV_FileList.Rows.Clear();
             }
         }
 
@@ -93,8 +80,8 @@ namespace xls2xlsxConverter
                 {
                     if (!row.IsNewRow)
                     {
-                        string inputFilePath = row.Cells["InputFilePath"].Value.ToString(); // 열의 이름은 실제 설정된 열 이름에 따라 바꿔주세요
-                        string outputFilePath = txt_selectedPath.Text + row.Cells["FileName"].Value.ToString() + ".xlsx"; // 원하는 방식으로 출력 파일 경로를 설정해주세요
+                        string inputFilePath = row.Cells["InputFilePath"].Value.ToString(); 
+                        string outputFilePath = txt_selectedPath.Text + row.Cells["FileName"].Value.ToString().Replace(".xls", "") + ".xlsx";
 
                         ConvertXlsToXlsx(inputFilePath, outputFilePath);
                     }
@@ -122,6 +109,8 @@ namespace xls2xlsxConverter
                     {
                         workbook = new XSSFWorkbook(fs); // XSSFWorkbook for xlsx
                     }
+
+                    MessageBox.Show(outputFilePath, "File path is empty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     using (var output = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write))
                     {

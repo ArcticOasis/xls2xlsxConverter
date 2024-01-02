@@ -32,6 +32,10 @@ namespace xls2xlsxConverter
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(xls2xlsxConverter));
             dGV_FileList = new DataGridView();
+            No = new DataGridViewTextBoxColumn();
+            FileName = new DataGridViewTextBoxColumn();
+            Progress = new DataGridViewTextBoxColumn();
+            InputFilePath = new DataGridViewTextBoxColumn();
             btn_convert = new Button();
             openFileDialog1 = new OpenFileDialog();
             btn_FileAdd = new Button();
@@ -45,15 +49,58 @@ namespace xls2xlsxConverter
             // 
             // dGV_FileList
             // 
+            dGV_FileList.AllowUserToAddRows = false;
+            dGV_FileList.AllowUserToDeleteRows = false;
+            dGV_FileList.AllowUserToResizeColumns = false;
+            dGV_FileList.AllowUserToResizeRows = false;
             dGV_FileList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dGV_FileList.BackgroundColor = SystemColors.Window;
             dGV_FileList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dGV_FileList.ColumnHeadersVisible = false;
+            dGV_FileList.Columns.AddRange(new DataGridViewColumn[] { No, FileName, Progress, InputFilePath });
             dGV_FileList.Location = new Point(14, 92);
             dGV_FileList.Name = "dGV_FileList";
             dGV_FileList.ReadOnly = true;
+            dGV_FileList.RowHeadersVisible = false;
             dGV_FileList.RowHeadersWidth = 62;
             dGV_FileList.RowTemplate.Height = 33;
+            dGV_FileList.ScrollBars = ScrollBars.Vertical;
+            dGV_FileList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dGV_FileList.ShowCellToolTips = false;
             dGV_FileList.Size = new Size(672, 447);
             dGV_FileList.TabIndex = 0;
+            // 
+            // No
+            // 
+            No.HeaderText = "No";
+            No.MinimumWidth = 8;
+            No.Name = "No";
+            No.ReadOnly = true;
+            No.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // FileName
+            // 
+            FileName.HeaderText = "FileName";
+            FileName.MinimumWidth = 8;
+            FileName.Name = "FileName";
+            FileName.ReadOnly = true;
+            FileName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Progress
+            // 
+            Progress.HeaderText = "Progress";
+            Progress.MinimumWidth = 8;
+            Progress.Name = "Progress";
+            Progress.ReadOnly = true;
+            Progress.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // InputFilePath
+            // 
+            InputFilePath.HeaderText = "InputFilePath";
+            InputFilePath.MinimumWidth = 8;
+            InputFilePath.Name = "InputFilePath";
+            InputFilePath.ReadOnly = true;
+            InputFilePath.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
             // btn_convert
             // 
@@ -160,5 +207,9 @@ namespace xls2xlsxConverter
         private Button btn_folder;
         private TextBox txt_selectedPath;
         private Label label_SaveDirectory;
+        private DataGridViewTextBoxColumn No;
+        private DataGridViewTextBoxColumn FileName;
+        private DataGridViewTextBoxColumn Progress;
+        private DataGridViewTextBoxColumn InputFilePath;
     }
 }
