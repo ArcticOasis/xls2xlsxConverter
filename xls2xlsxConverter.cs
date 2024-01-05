@@ -98,23 +98,93 @@ namespace xls2xlsxConverter
         {
             try
             {
-                using (var fs = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(inputFilePath, FileMode.Open, FileAccess.Read))
                 {
-                    IWorkbook workbook;
+                    IWorkbook xlsxWorkbook = new XSSFWorkbook();
+
+                    IWorkbook xlsWorkbook;
+
                     if (Path.GetExtension(inputFilePath).Equals(".xls"))
                     {
-                        workbook = new HSSFWorkbook(fs); // HSSFWorkbook for xls
+                        xlsWorkbook = new HSSFWorkbook(fs);
+
+                        for (int i = 0; i < xlsWorkbook.NumberOfSheets; i++)
+                        {
+                            ISheet xlsSheet = xlsWorkbook.GetSheetAt(i);
+                            ISheet xlsxSheet = xlsxWorkbook.CreateSheet(xlsSheet.SheetName);
+
+                            for (int j = 0; j <= xlsSheet.LastRowNum; j++)
+                            {
+                                IRow xlsRow = xlsSheet.GetRow(j);
+                                IRow xlsxRow = xlsxSheet.CreateRow(j);
+
+                                if (xlsRow != null)
+                                {
+                                    for (int k = 0; k < xlsRow.LastCellNum; k++)
+                                    {
+                                        ICell xlsCell = xlsRow.GetCell(k);
+                                        ICell xlsxCell = xlsxRow.CreateCell(k);
+
+                                        if (xlsCell != null)
+                                        {
+                                            object cellValue = GetCellValue(xlsCell);
+
+                                            if (cellValue != null)
+                                            {
+                                                switch (xlsCell.CellType)
+                                                {
+                                                    case CellType.Numeric:
+                                                        if (DateUtil.IsCellDateFormatted(xlsCell))
+                                                        {
+                                                            xlsxCell.SetCellValue(xlsCell.DateCellValue);
+                                                            xlsxCell.SetCellType(CellType.Formula);
+                                                            xlsxCell.CellFormula = xlsCell.CellFormula;
+                                                        }
+                                                        else
+                                                        {
+                                                            xlsxCell.SetCellValue((double)cellValue);
+                                                        }
+                                                        break;
+
+                                                    case CellType.String:
+                                                        xlsxCell.SetCellValue((string)cellValue);
+                                                        break;
+
+                                                    case CellType.Boolean:
+                                                        xlsxCell.SetCellValue((bool)cellValue);
+                                                        break;
+
+                                                    case CellType.Formula:
+                                                        xlsxCell.SetCellFormula(xlsCell.CellFormula);
+                                                        break;
+
+                                                    case CellType.Blank:
+                                                        break;
+
+                                                    case CellType.Error:
+                                                        xlsxCell.SetCellValue("Error Cell");
+                                                        break;
+                                                    default:
+                                                        xlsxCell.SetCellValue("Data replication for this cell failed.");
+                                                        break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        workbook = new XSSFWorkbook(fs); // XSSFWorkbook for xlsx
+                        MessageBox.Show("This file is not xls", "This file is not xls", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
                     MessageBox.Show(outputFilePath, "File path is empty", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-                    using (var output = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write))
+                    using (FileStream output = new FileStream(outputFilePath, FileMode.Create, FileAccess.Write))
                     {
-                        workbook.Write(output);
+                        xlsxWorkbook.Write(output);
                     }
                 }
             }
@@ -122,6 +192,46 @@ namespace xls2xlsxConverter
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        // Cell Value Type Export
+        static object GetCellValue(ICell cell)
+        {
+            switch (cell.CellType)
+            {
+                case CellType.Numeric:
+                    return cell.NumericCellValue;
+                case CellType.String:
+                    return cell.StringCellValue;
+                case CellType.Boolean:
+                    return cell.BooleanCellValue;
+                case CellType.Formula:
+                    return cell.CellFormula;
+                case CellType.Blank:
+                case CellType.Error:
+                default:
+                    return null;
+            }
+        }
+
+        static void CopyCellStyle(ICellStyle oldStyle, ICellStyle newStyle)
+        {
+            newStyle.Alignment = oldStyle.Alignment;
+            newStyle.VerticalAlignment = oldStyle.VerticalAlignment;
+            newStyle.WrapText = oldStyle.WrapText;
+            newStyle.Indention = oldStyle.Indention;
+            newStyle.Rotation = oldStyle.Rotation;
+            newStyle.BorderBottom = oldStyle.BorderBottom;
+            newStyle.BorderLeft = oldStyle.BorderLeft;
+            newStyle.BorderRight = oldStyle.BorderRight;
+            newStyle.BorderTop = oldStyle.BorderTop;
+            newStyle.BottomBorderColor = oldStyle.BottomBorderColor;
+            newStyle.LeftBorderColor = oldStyle.LeftBorderColor;
+            newStyle.RightBorderColor = oldStyle.RightBorderColor;
+            newStyle.TopBorderColor = oldStyle.TopBorderColor;
+            newStyle.FillForegroundColor = oldStyle.FillForegroundColor;
+            newStyle.FillPattern = oldStyle.FillPattern;
+            // 여러 다른 스타일 속성 복사
         }
     }
 }
